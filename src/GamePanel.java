@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ import javax.swing.SwingConstants;
 public class GamePanel extends JPanel{
 	private TTTGrid grid;
 	private JLabel winLabel;
+	private JButton rst;
 	
 	public GamePanel() {
 		super();
@@ -22,8 +24,9 @@ public class GamePanel extends JPanel{
 		setLayout(new BorderLayout());
 		
 		//Add Swing components to content pane
-		JButton rst = new JButton();
+		rst = new JButton();
 		rst.setText("Reset");
+		rst.setName("reset");
 		winLabel = new JLabel("", SwingConstants.CENTER);
 		winLabel.setFont(new Font("Serif", Font.PLAIN, 30));
 		winLabel.setVisible(false);
@@ -33,19 +36,7 @@ public class GamePanel extends JPanel{
 		
 		add(grid, BorderLayout.NORTH);
 		add(rst, BorderLayout.SOUTH);
-		add(winLabel, BorderLayout.CENTER);
-		
-		rst.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				remove(grid);
-				winLabel.setVisible(false);
-				reset();
-				add(grid, BorderLayout.NORTH);
-				revalidate();
-				repaint();
-			}
-		});
-		
+		add(winLabel, BorderLayout.CENTER);	
 	}
 	
 	private void setUpHandler() {
@@ -57,12 +48,17 @@ public class GamePanel extends JPanel{
 		});
 	}
 	
-	private void reset() {
+	public void reset() {
+		remove(grid);
+		winLabel.setVisible(false);
 		grid = new TTTGrid();
-		setUpHandler();
+		add(grid, BorderLayout.NORTH);
+		revalidate();
+		repaint();
 	}
 	
 	public void setButtonListeners(Game game) {
+		rst.addActionListener(game);
 		grid.setButtonListeners(game);
 	}
 }

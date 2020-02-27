@@ -45,5 +45,9 @@ public class UI extends JFrame{
 	public void startGame() {
 		layout.next(getContentPane());
 	}
+	
+	public void resetGamePanel() {
+		gamePanel.reset();
+	}
 
 }

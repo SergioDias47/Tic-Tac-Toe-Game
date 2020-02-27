@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 public class Game implements ActionListener {
@@ -89,8 +90,31 @@ public class Game implements ActionListener {
 
 	@Override
     public void actionPerformed(ActionEvent e) {
+		System.out.println(((JComponent)e.getSource()).getName());
 		if(e.getSource().getClass() == TTTButton.class) {
-			((TTTButton) e.getSource()).setX();
+			int button = Integer.parseInt(((JComponent) e.getSource()).getName()) - 1;
+			int xCoord = (button % 3);
+			int yCoord = (int) Math.ceil(button/3);
+			int ret = updateGameState(xCoord, yCoord);
+			switch(ret) {
+				case 1:
+					((TTTButton) e.getSource()).setX();
+					break;
+				case 2:
+					((TTTButton) e.getSource()).setO();
+					break;
+			}
+			if(checkWinner()) {
+				//fireGridEvent(new GridEvent(this, game.winner));	
+			}
+		}
+		else {
+			if(((JComponent) e.getSource()).getName().equals("reset")) {
+				state = new int[3][3];
+				playerTurn = 1;
+				gui.resetGamePanel();
+				gui.setButtonListeners(this);
+			}
 		}
 		
 		
