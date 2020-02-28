@@ -42,12 +42,20 @@ public class UI extends JFrame{
 		gamePanel.setButtonListeners(game);
 	}
 	
+	public void fillBotCell(int pos) {
+		gamePanel.fillBotCell(pos);
+	}
+	
 	public void startGame() {
 		layout.next(getContentPane());
 	}
 	
 	public void resetGamePanel() {
 		gamePanel.reset();
+	}
+	
+	public void showWinner(Game game) {
+		gamePanel.showWinner(game);
 	}
 
 }

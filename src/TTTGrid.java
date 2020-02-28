@@ -1,16 +1,9 @@
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
 public class TTTGrid extends JPanel {
@@ -62,5 +55,9 @@ public class TTTGrid extends JPanel {
 		for(TTTButton b : buttons) {
 			b.addActionListener(game);
 		}
+	}
+	
+	public void fillBotCell(int pos) {
+		buttons[pos-1].setO();
 	}
 }

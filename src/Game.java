@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 public class Game implements ActionListener {
 	private UI gui;
-	public int state[][];
+	public int cells[];
 	/*
 	 0 = Nothing
 	 1 = X
@@ -17,14 +17,17 @@ public class Game implements ActionListener {
 	public int playerTurn; //1 if player 1 or 2 if player 2
 	public boolean gameOver;
 	public int winner;
+	public int gamemode;
 	
 	public Game() {
 		//UI
 		gui = new UI("gui");
-		
+		initialize();
+	}
+	
+	public void initialize() {
 		gui.setButtonListeners(this);
-		
-		state = new int[3][3];
+		cells = new int[10];
 		playerTurn = 1;
 		gameOver = false;
 		winner = 0;
@@ -33,24 +36,27 @@ public class Game implements ActionListener {
 	public boolean checkWinner() {
 		gameOver = true;
 		winner = (playerTurn % 2) + 1;
+		
 		//Check rows
-		for(int[] row : state) {
-			if(checkRow(row))
-				return true;
-		}
+		if(cells[1] == cells[2] && cells[2] == cells[3] && cells[3] != 0)
+			return true;
+		if(cells[4] == cells[5] && cells[5] == cells[6] && cells[6] != 0)
+			return true;
+		if(cells[7] == cells[8] && cells[8] == cells[9] && cells[9] != 0)
+			return true;
 
 		//Check columns
-		if(state[0][0] == state[1][0] && state[1][0] == state[2][0] && state[0][0] != 0)
+		if(cells[1] == cells[4] && cells[4] == cells[7] && cells[7] != 0)
 			return true;
-		if(state[0][1] == state[1][1] && state[1][1] == state[2][1] && state[0][1] != 0)
+		if(cells[2] == cells[5] && cells[5] == cells[8] && cells[8] != 0)
 			return true;
-		if(state[0][2] == state[1][2] && state[1][2] == state[2][2] && state[2][2] != 0)
+		if(cells[3] == cells[6] && cells[6] == cells[9] && cells[9] != 0)
 			return true;
 		
 		//Check diagonals
-		if(state[0][0] == state[1][1] && state[2][2] == state[1][1] && state[0][0] != 0)
+		if(cells[1] == cells[5] && cells[5] == cells[9] && cells[9] != 0)
 			return true;
-		if(state[0][2] == state[1][1] && state[2][0] == state[1][1] && state[1][1] != 0)
+		if(cells[7] == cells[5] && cells[5] == cells[3] && cells[3] != 0)
 			return true;
 		
 		winner = 0;
@@ -58,31 +64,22 @@ public class Game implements ActionListener {
 		return false;
 	}
 	
-	static boolean checkRow(int[] row) {
-		int value = row[0];
-		for(int i = 1; i < row.length; i++) {
-			if(row[i] != value)
-				return false;
-		}
-		return (value != 0);
-	}
-	
 	public void nextPlayer() {
 		playerTurn = (playerTurn % 2) + 1;
 	}
 	
-	public int updateGameState(int xpos, int ypos) { // returns 0 if failure, 1 if player 1 played and same for 2
-		if(state[ypos][xpos] != 0 || gameOver)
+	public int updateGameState(int pos) { // returns 0 if failure, 1 if player 1 played and same for 2
+		if(cells[pos] != 0 || gameOver)
 			return 0;
 		int currentPlayer = playerTurn;
-		state[ypos][xpos] = currentPlayer;
+		cells[pos] = currentPlayer;
 		nextPlayer();
 		return currentPlayer;
 	}
 	
 	public boolean isGameOver() {
-		if(state[0][0] != 0 && state[0][1] != 0 && state[0][2] != 0 && state[1][0] != 0 &&
-				state[1][1] != 0 && state[1][2] != 0 && state[2][0] != 0 && state[2][1] != 0 && state[2][2] != 0) {
+		if(cells[1] != 0 && cells[2] != 0 && cells[3] != 0 && cells[4] != 0 &&
+				cells[5] != 0 && cells[6] != 0 && cells[7] != 0 && cells[8] != 0 && cells[9] != 0) {
 			return true;
 		}
 		return checkWinner();
@@ -92,10 +89,8 @@ public class Game implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 		System.out.println(((JComponent)e.getSource()).getName());
 		if(e.getSource().getClass() == TTTButton.class) {
-			int button = Integer.parseInt(((JComponent) e.getSource()).getName()) - 1;
-			int xCoord = (button % 3);
-			int yCoord = (int) Math.ceil(button/3);
-			int ret = updateGameState(xCoord, yCoord);
+			int button = Integer.parseInt(((JComponent) e.getSource()).getName());
+			int ret = updateGameState(button);
 			switch(ret) {
 				case 1:
 					((TTTButton) e.getSource()).setX();
@@ -105,15 +100,30 @@ public class Game implements ActionListener {
 					break;
 			}
 			if(checkWinner()) {
-				//fireGridEvent(new GridEvent(this, game.winner));	
+				gui.showWinner(this);
 			}
+			
+			if(gamemode == MyConstants.PLAYER_VS_BOT) {
+				System.out.println("----CELLS-----");
+				for(int i = 1; i <= 9; i++)
+					System.out.print(cells[i] + " ");
+				System.out.println("");
+				for(int i = 1; i <= 9; i++)
+					if(cells[i] == MyConstants.EMPTY_CELL) {
+						updateGameState(i);
+						gui.fillBotCell(i);
+						if(checkWinner()) {
+							gui.showWinner(this);
+						}
+						break;
+					}		
+				}
+			
 		}
 		else {
 			if(((JComponent) e.getSource()).getName().equals("reset")) {
-				state = new int[3][3];
-				playerTurn = 1;
 				gui.resetGamePanel();
-				gui.setButtonListeners(this);
+				initialize();
 			}
 		}
 		
@@ -121,16 +131,14 @@ public class Game implements ActionListener {
 		JButton menuItem = (JButton) e.getSource();
 
         if (menuItem.getName().equals("PP")) {
+        	gamemode = MyConstants.PLAYER_VS_PLAYER;
         	gui.startGame();
         }
         else if (menuItem.getName().equals("PB")) {
-        	
+        	gamemode = MyConstants.PLAYER_VS_BOT;
+        	gui.startGame();
         }
-        else if (menuItem.getName().equals("1")) {
-        	
-        }
-        
-        
+      
     }
 }
 

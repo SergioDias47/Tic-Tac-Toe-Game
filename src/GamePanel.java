@@ -57,8 +57,17 @@ public class GamePanel extends JPanel{
 		repaint();
 	}
 	
+	public void showWinner(Game game) {
+		winLabel.setText("Player " + game.winner + " won the game!");
+		winLabel.setVisible(true);
+	}
+	
 	public void setButtonListeners(Game game) {
 		rst.addActionListener(game);
 		grid.setButtonListeners(game);
+	}
+	
+	public void fillBotCell(int pos) {
+		grid.fillBotCell(pos);
 	}
 }
