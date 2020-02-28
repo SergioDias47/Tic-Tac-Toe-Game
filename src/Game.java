@@ -101,24 +101,17 @@ public class Game implements ActionListener {
 			}
 			if(checkWinner()) {
 				gui.showWinner(this);
+				return;
 			}
 			
 			if(gamemode == MyConstants.PLAYER_VS_BOT) {
-				System.out.println("----CELLS-----");
-				for(int i = 1; i <= 9; i++)
-					System.out.print(cells[i] + " ");
-				System.out.println("");
-				for(int i = 1; i <= 9; i++)
-					if(cells[i] == MyConstants.EMPTY_CELL) {
-						updateGameState(i);
-						gui.fillBotCell(i);
-						if(checkWinner()) {
-							gui.showWinner(this);
-						}
-						break;
-					}		
+				int pos = findBestMove();
+				updateGameState(pos);
+				gui.fillBotCell(pos);
+				if(checkWinner()) {
+					gui.showWinner(this);
 				}
-			
+			}		
 		}
 		else {
 			if(((JComponent) e.getSource()).getName().equals("reset")) {
@@ -140,6 +133,14 @@ public class Game implements ActionListener {
         }
       
     }
+
+	private int findBestMove() {
+		for(int i = 1; i <= 9; i++)
+			if(cells[i] == MyConstants.EMPTY_CELL) 
+				return i;
+		return 0;
+	}		
+	
 }
 
 //https://github.com/OSSpk/Minesweeper-Desktop-Game/tree/master/Code/src/minesweeper

@@ -34,23 +34,6 @@ public class TTTGrid extends JPanel {
 		
 	}
 	
-	public void fireGridEvent(GridEvent event) {
-		Object[] listeners = listenerList.getListenerList();
-		for(int i = 0; i < listeners.length; i+=1) {
-			if(listeners[i] == GridListener.class) {
-				((GridListener) listeners[i+1]).gridEventOcurred(event);
-			}
-		}
-	}
-	
-	public void addGridListener(GridListener listener) {
-		listenerList.add(GridListener.class, listener);
-	}
-	
-	public void removeGridListener(GridListener listener) {
-		listenerList.remove(GridListener.class, listener);
-	}
-	
 	public void setButtonListeners(Game game) {
 		for(TTTButton b : buttons) {
 			b.addActionListener(game);

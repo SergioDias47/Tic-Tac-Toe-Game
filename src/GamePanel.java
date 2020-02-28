@@ -32,20 +32,10 @@ public class GamePanel extends JPanel{
 		winLabel.setVisible(false);
 		
 		grid = new TTTGrid();
-		setUpHandler();
 		
 		add(grid, BorderLayout.NORTH);
 		add(rst, BorderLayout.SOUTH);
 		add(winLabel, BorderLayout.CENTER);	
-	}
-	
-	private void setUpHandler() {
-		grid.addGridListener(new GridListener() {
-			public void gridEventOcurred(GridEvent event) {
-				winLabel.setText("Player " + event.getWinner() + " won the game!");
-				winLabel.setVisible(true);
-			}
-		});
 	}
 	
 	public void reset() {
