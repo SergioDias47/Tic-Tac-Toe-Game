@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +22,7 @@ public class UI extends JFrame{
 		setVisible(true);
 		setSize(700,700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Game");
+		setTitle("Tic-Tac-Toe Game");
 		
 		//Set layout manager
 		layout = new CardLayout();
@@ -38,9 +39,22 @@ public class UI extends JFrame{
 	}
 
 	public void setButtonListeners(Game game) {
-		menuFrame.setButtonListeners(game);
+		//menuFrame.setButtonListeners(game);
 		gamePanel.setButtonListeners(game);
 	}
+	
+	public void setGridListener(Game game) {
+		gamePanel.setGridListener(game);
+	}
+	
+	public void unsetGridListener(Game game) {
+		gamePanel.unsetGridListener(game);
+	}
+	
+	public void setMenuListener(Game game) {
+		menuFrame.setButtonListeners(game);
+	}
+	
 	
 	public void fillBotCell(int pos) {
 		gamePanel.fillBotCell(pos);
@@ -50,12 +64,24 @@ public class UI extends JFrame{
 		layout.next(getContentPane());
 	}
 	
-	public void resetGamePanel() {
-		gamePanel.reset();
+	public void resetGamePanel(boolean resetScores) {
+		gamePanel.reset(resetScores);
 	}
 	
 	public void showWinner(Game game) {
 		gamePanel.showWinner(game);
+	}
+	
+	public void goToMenu() {
+		layout.next(getContentPane());
+	}
+	
+	public void exit() {
+		dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+	}
+	
+	public void updateScore(int player, int score) {
+		gamePanel.updateScore(player, score);
 	}
 
 }

@@ -40,6 +40,12 @@ public class TTTGrid extends JPanel {
 		}
 	}
 	
+	public void unsetButtonListeners(Game game) {
+		for(TTTButton b : buttons) {
+			b.removeActionListener(game);
+		}
+	}
+	
 	public void fillBotCell(int pos) {
 		buttons[pos-1].setO();
 	}
