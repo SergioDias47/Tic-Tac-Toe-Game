@@ -100,7 +100,7 @@ public class GamePanel extends JPanel{
           int time = 2;
            @Override
            public void run() {
-        	   	String newText = winLabel.getText();
+        	   String newText = winLabel.getText();
 				 newText = newText.substring(0,newText.length() - 2) + time + "s"; 
 				 time--;	  
 				 winLabel.setText(newText);

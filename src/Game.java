@@ -164,7 +164,7 @@ public class Game implements ActionListener {
 		for(int i = 1; i <= 9; i++)
 			if(cells[i] == MyConstants.EMPTY_CELL) {
 				cells[i] = MyConstants.O_CELL;
-				int score = minimax(false, 3);
+				int score = minimax(false, 9);
 				if(score > bestScore) {
 					bestScore = score;
 					bestMove = i;
