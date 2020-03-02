@@ -39,7 +39,6 @@ public class UI extends JFrame{
 	}
 
 	public void setButtonListeners(Game game) {
-		//menuFrame.setButtonListeners(game);
 		gamePanel.setButtonListeners(game);
 	}
 	
